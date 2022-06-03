@@ -1410,7 +1410,9 @@ sub get_host_ipaddr
     my $hostname = get_hostname();
 
     # from perlfaq9
-    my $ipaddr = inet_ntoa(scalar gethostbyname($hostname));
+#    my $ipaddr = inet_ntoa(scalar gethostbyname($hostname));
+#    mg fix for rh8
+    my $ipaddr = qx(/bin/hostname -I);
 
     return($ipaddr);
 }
