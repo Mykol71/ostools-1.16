@@ -3050,7 +3050,9 @@ sub hl_harden_iptables
 {
 	my ($iptables_ports) = @_;
 
-	my $fwcmd = "/sbin/iptables";
+#	my $fwcmd = "/sbin/iptables";
+#rh8 fix mg.
+	my $fwcmd = "iptables";
 
 
 	showinfo("Setup IPTables ...");
