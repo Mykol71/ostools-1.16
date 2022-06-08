@@ -3052,7 +3052,7 @@ sub hl_harden_iptables
 
 #	my $fwcmd = "/sbin/iptables";
 #rh8 fix mg.
-	my $fwcmd = "iptables";
+	my $fwcmd = "/usr/sbin/iptables";
 
 
 	showinfo("Setup IPTables ...");
