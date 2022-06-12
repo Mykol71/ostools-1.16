@@ -108,7 +108,7 @@ GetOptions(
 
 # --version
 if($VERSION != 0) {
-	print "OSTools Version: 1.15.0\n";
+	print "OSTools Version: 1.16.0\n";
 	print "$PROGNAME: $CVS_REVISION\n";
 	exit 0;
 }

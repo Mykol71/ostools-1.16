@@ -48,7 +48,7 @@ if ($HELP) {
 
 # --version
 if ($VERSION) {
-	print "OSTools Version: 1.15.a\n";
+	print "OSTools Version: 1.16.a\n";
 	print "$PROGNAME: $CVS_REVISION\n";
 	exit(0);
 }

@@ -153,7 +153,7 @@ GetOptions (
 
 # --version
 if ($VERSION != 0) {
-	print "OSTools Version: 1.15.0\n";
+	print "OSTools Version: 1.16.0\n";
 	print "$PROGNAME: $CVS_REVISION\n";
 	exit($EXIT_OK);
 }
@@ -488,7 +488,7 @@ sub ost_info_parse_version
 
 sub ost_info_get_new_version
 {
-    my %ost_vers_info = ost_info_parse_version("1.15.0");
+    my %ost_vers_info = ost_info_parse_version("1.16.0");
 
     return(%ost_vers_info);
 }

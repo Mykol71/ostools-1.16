@@ -104,7 +104,7 @@ my $IF_NAME_DEF = "eth0";
 my $NAMESERVER = "";
 my $NAMESERVER_DEF = "8.8.8.8";
 my $HOSTNAME = "";
-my $TFSERVER = "rtihardware.homelinux.com";
+my $TFSERVER = "rhel8repo.centralus.cloudapp.azure.com";
 my $KEEPDHCP = "";
 my $KEEPKERNELS_MIN = 2;
 my $KEEPKERNELS = 8;
@@ -399,7 +399,7 @@ GetOptions(
 
 # --version
 if ($VERSION) {
-	print "OSTools Version: 1.15.0\n";
+	print "OSTools Version: 1.16.0\n";
 	print "$PROGNAME: $CVS_REVISION\n";
 	exit(0);
 }
@@ -1226,7 +1226,7 @@ $PROGNAME --ostools
 $PROGNAME --reboot
 
 -- Defaults --
-    --tfserver=rtihardware.homelinux.com
+    --tfserver=rhel8repo.centralus.cloudapp.azure.com
     --ipaddr=192.168.1.21
     --netmask=255.255.255.0
     --gateway=192.168.1.1
@@ -3225,7 +3225,7 @@ sub uos_configure_yum
 sub update_ostools
 {
 	print("Updating Teleflora OS Tools...\n");
-	system("wget -O - http://$TFSERVER/ostools/install-ostools-1.15.pl | sudo perl - --update --norun-harden-linux");
+	system("wget -O - http://$TFSERVER/ostools-1.16/install-ostools-1.16.pl | sudo perl - --update --norun-harden-linux");
 	return($?);
 }
 
@@ -6406,7 +6406,7 @@ sub uos_audit_system_remote_rules_file
     my $ml = '[audit_system_remote_rules_file]';
 
     my $rules_file_name = uos_nameof_audit_system_config_file();
-    my $rules_url = 'http://rtihardware.homelinux.com/ostools/' . $rules_file_name;
+    my $rules_url = 'http://rhel8repo.centralus.cloudapp.com/ostools-1.16/' . $rules_file_name;
     my $rules_path = $EMPTY_STR;
 
     system("curl --output /dev/null --silent --head --fail $rules_url");

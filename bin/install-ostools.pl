@@ -22,9 +22,9 @@ my $PROGNAME = basename($0);
 
 # global variables
 my $TOOLSDIR = "";
-my $TFSERVER = "rtihardware.homelinux.com";
-my $PACKAGE = "http://$TFSERVER/ostools/ostools-1.15-latest.tar.gz";
-my $MSG_PREFIX = "OSTools v1.15.0";
+my $TFSERVER = "rhel8repo.centralus.cloudapp.com";
+my $PACKAGE = "http://$TFSERVER/ostools-1.16/ostools-1.16-latest.tar.gz";
+my $MSG_PREFIX = "OSTools v1.16.0";
 my $FRESH_INSTALL = 0;
 my $RTI = 0;
 my $DAISY = 0;
@@ -65,7 +65,7 @@ GetOptions(
 
 # --version
 if ($VERSION) {
-	print "OSTools Version: 1.15.0\n";
+	print "OSTools Version: 1.16.0\n";
 	print "$PROGNAME: $CVS_REVISION\n";
 	exit($EXIT_OK);
 }
@@ -115,7 +115,7 @@ if (defined($ARGV[0])) {
 	}
 }
 
-loginfo("BEGIN ostools 1.15.0 installation");
+loginfo("BEGIN ostools 1.16.0 installation");
 loginfo("$PROGNAME: $CVS_REVISION");
 
 #
@@ -342,7 +342,7 @@ if (-d "/d/daisy") {
 	install_daisy_patches();
 }
 
-loginfo("END ostools 1.15.0 installation");
+loginfo("END ostools 1.16.0 installation");
 
 exit($EXIT_OK);
 

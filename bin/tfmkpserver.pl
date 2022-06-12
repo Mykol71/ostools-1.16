@@ -25,7 +25,7 @@ use OSTools::Hardware;
 use OSTools::AppEnv;
 
 
-our $VERSION = 1.15;
+our $VERSION = 1.16;
 my $CVS_REVISION = '$Revision: 1.32 $';
 my $TIMESTAMP = strftime('%Y%m%d%H%M%S', localtime());
 my $PROGNAME = basename($PROGRAM_NAME);
@@ -242,7 +242,7 @@ GetOptions(
 
 # --version
 if ($CVS_VERSION) {
-    print "OSTools Version: 1.15.0\n";
+    print "OSTools Version: 1.16.0\n";
     print "$PROGNAME: $CVS_REVISION\n";
     exit($EXIT_OK);
 }

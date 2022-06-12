@@ -159,7 +159,7 @@ GetOptions(
 
 # --version
 if($VERSION != 0) {
-	print "OSTools Version:  1.15.0\n";
+	print "OSTools Version:  1.16.0\n";
 	print "$PROGNAME: $CVS_REVISION\n";
 	exit(0);
 }
@@ -264,7 +264,7 @@ while(1) {
 
 	# Summary information about this shop.
 	$title = titlestring("Support Menu");
-	$title .= "OSTools Package Version: 1.15.0\\n";
+	$title .= "OSTools Package Version: 1.16.0\\n";
 	$title .= "  Support Menus Version: $CVS_REV_NR\\n";
 	$title .= "      Linux Platform ID: $OS\\n";
 	$title .= "          " . get_pos_version();

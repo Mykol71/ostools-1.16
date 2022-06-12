@@ -73,7 +73,7 @@ use OSTools::AppEnv;
 use OSTools::Filesys;
 
 
-our $VERSION = 1.15;
+our $VERSION = 1.16;
 my $CVS_REVISION = '$Revision: 1.11 $';
 my $TIMESTAMP = POSIX::strftime("%Y%m%d%H%M%S", localtime());
 my $PROGNAME = basename($0);
@@ -315,7 +315,7 @@ foreach my $option (@AllOptions) {
 
 # --version
 if ($CVS_VERSION) {
-    print "OSTools Version: 1.15.0\n";
+    print "OSTools Version: 1.16.0\n";
     print "$CVS_REVISION\n";
     exit($EXIT_OK);
 }

@@ -1,3 +1,10 @@
+OSTools 1.16
+============
+
+Adds support for RH8.
+
+
+
 README for OSTools 1.15
 =======================
 
