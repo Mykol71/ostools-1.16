@@ -8794,9 +8794,7 @@ sub get_ipaddr
 {
     my ($hostname) = @_;
 
-#    my $ip_addr_binary = gethostbyname($hostname);
-# mg fix for rh8
-    my $ip_addr_binary = qx(/bin/hostname -I);
+    my $ip_addr_binary = gethostbyname($hostname);
     my $ip_addr = inet_ntoa($ip_addr_binary);
 
     return($ip_addr);
