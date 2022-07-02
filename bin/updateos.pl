@@ -2258,7 +2258,9 @@ sub uos_rewrite_system_hosts_file
     }
 
     # form a new line suitable for the /etc/hosts file
-    my $hosts_file_entry = "$ipaddr\t$fqdn $hostname\n";
+#    my $hosts_file_entry = "$ipaddr\t$fqdn $hostname\n";
+#    mg fix for rh8
+    my $hosts_file_entry = "$ipaddr\t$hostname $fqdn\n";
 
     while (<$old>) {
 
@@ -8792,7 +8794,9 @@ sub get_ipaddr
 {
     my ($hostname) = @_;
 
-    my $ip_addr_binary = gethostbyname($hostname);
+#    my $ip_addr_binary = gethostbyname($hostname);
+# mg fix for rh8
+    my $ip_addr_binary = qx(/bin/hostname -I);
     my $ip_addr = inet_ntoa($ip_addr_binary);
 
     return($ip_addr);
@@ -8874,7 +8878,9 @@ sub update_hosts_config_file
 
     # form a new line suitable for the /etc/hosts file
     my $fqdn = $new_hostname . ".teleflora.com";
-    my $hosts_file_entry = "$ipaddr\t$fqdn $new_hostname\n";
+#    my $hosts_file_entry = "$ipaddr\t$fqdn $new_hostname\n";
+#    mg fix for rh8
+    my $hosts_file_entry = "$ipaddr\t$new_hostname $fqdn\n";
 
     if (open(my $ocfh, '<', $config_file_path)) {
         if (open(my $ncfh, '>', $new_config_file_path)) {
