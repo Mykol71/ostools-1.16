@@ -3,7 +3,17 @@ OSTools 1.16
 
 Adds support for RH8.
 
+~ 7/3/22; hostname ipaddr fix in updateos.pl for rh8.
+- 
 
+
+Key -
+-----
+
++ Done
+- To Do
+~ In Progress
+? Consider
 
 README for OSTools 1.15
 =======================
