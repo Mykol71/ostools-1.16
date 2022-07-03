@@ -8877,8 +8877,7 @@ sub update_hosts_config_file
     my $fqdn = $new_hostname . ".teleflora.com";
 #    my $hosts_file_entry = "$ipaddr\t$fqdn $new_hostname\n";
 #    mg fix for rh8
-    my $ipad = qx(/bin/hostname -I);
-    my $hosts_file_entry = "$ipad\t$new_hostname $fqdn\n";
+    my $hosts_file_entry = "$ipaddr\t$new_hostname $fqdn\n";
 
     if (open(my $ocfh, '<', $config_file_path)) {
         if (open(my $ncfh, '>', $new_config_file_path)) {
