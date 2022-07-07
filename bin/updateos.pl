@@ -8795,6 +8795,7 @@ sub get_ipaddr
     my ($hostname) = @_;
 
     my $ip_addr_binary = gethostbyname($hostname);
+    my $ip_addr = inet_ntoa($ip_addr_binary);
 
     return($ip_addr);
 }
