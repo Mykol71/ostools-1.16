@@ -135,6 +135,12 @@ sub plat_os_version
 	    $os = "RHEL7";
 	    last;
 	}
+	# Redhat Enterprise Linux Server 9
+	if ((/(release)(\s+)(9)/)
+	    ||  (/(CentOS)([[:print:]]+)(\s)(9)/)) {
+	    $os = "RHEL7";
+	    last;
+	}
 	# ES 6
 	# Redhat Enterprise Linux Server 6
 	if ((/(release)(\s+)(6)/)
