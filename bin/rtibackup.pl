@@ -760,7 +760,7 @@ if ($#BACKUP >= 0) {
 
 	    else {
 		my $cat_cmd = "cat /etc/redhat-release";
-		my $encrypt_cmd = "nice openssl aes-128-cbc -e -salt -k \"$CRYPTKEY\"";
+		my $encrypt_cmd = "nice openssl aes-128-cbc -e -salt -k \"$CRYPTKEY\" -iter 1";
 		my $cmd = $cat_cmd . " | " . $encrypt_cmd . " > $MOUNTPOINT/$VALIDATION_FILE";
 
 		system("$cmd");
@@ -1615,7 +1615,7 @@ sub is_compressed
 
     my $tmpfile = make_tempfile($prefix);
 
-    my $decrypt_cmd = "openssl aes-128-cbc -d -salt -k \"$CRYPTKEY\"";
+    my $decrypt_cmd = "openssl aes-128-cbc -d -salt -k \"$CRYPTKEY\" -iter 1";
 
     my $undo_cmd = "cat $bu_file | " . $decrypt_cmd;
 
@@ -3357,7 +3357,7 @@ sub create_tarfile
 	#
 	my $tar_cmd = "nice tar --exclude-from=/tmp/exclude.$$ -cvf - @tobackup";
 	my $compress_cmd = "nice bzip2 --quiet";
-	my $encrypt_cmd = "nice openssl aes-128-cbc -e -salt -k \"$CRYPTKEY\"";
+	my $encrypt_cmd = "nice openssl aes-128-cbc -e -salt -k \"$CRYPTKEY\" -iter 1";
 
 	if ($COMPRESS_BU) {
 		$tar_cmd .= " | " . $compress_cmd;
@@ -3535,7 +3535,7 @@ sub restore_tarfile
 	# was removed in version 1.192 of rtibackup.pl.
 	#
 	my $untar_cmd = "cat $tarfile";
-	my $decrypt_cmd = "openssl aes-128-cbc -d -salt -k \"$CRYPTKEY\"";
+	my $decrypt_cmd = "openssl aes-128-cbc -d -salt -k \"$CRYPTKEY\" -iter 1";
 	my $decompress_cmd = "bzip2 -dc";
 	my $tar_cmd = "tar -C $ROOTDIR --exclude-from /tmp/restore-excludes.$$ $keepfiles -xvf -";
 
@@ -3693,7 +3693,7 @@ sub list_tarfile
 	# was removed in version 1.192 of rtibackup.pl.
 	#
 	my $untar_cmd = "cat $tarfile";
-	my $decrypt_cmd = "nice openssl aes-128-cbc -d -salt -k \"$CRYPTKEY\"";
+	my $decrypt_cmd = "nice openssl aes-128-cbc -d -salt -k \"$CRYPTKEY\" -iter 1";
 	my $decompress_cmd = "nice bzip2 -dc";
 	my $tar_cmd = "nice tar -tvf -";
 
@@ -4118,7 +4118,7 @@ sub restore_files
 		if($RTI == 0) {
 			loginfo("--rti not specified. Will not restore bbxd files.");
 		} else {
-			system("cat $MOUNTPOINT/usr2.bak | openssl aes-128-cbc -d -salt -k \"$CRYPTKEY\" | tar -C $ROOTDIR -xvf - usr2/bbx/bbxd 2>> $LOGFILE");
+			system("cat $MOUNTPOINT/usr2.bak | openssl aes-128-cbc -d -salt -k \"$CRYPTKEY\" -iter 1 | tar -C $ROOTDIR -xvf - usr2/bbx/bbxd 2>> $LOGFILE");
 			$returnval += $?;
 		}
 	}
@@ -4129,7 +4129,7 @@ sub restore_files
 		if($RTI == 0) {
 			loginfo("--rti not specified. Will not restore bbxps files.");
 		} else {
-			system("cat $MOUNTPOINT/usr2.bak | openssl aes-128-cbc -d -salt -k \"$CRYPTKEY\" | tar -C $ROOTDIR -xvf - usr2/bbx/bbxps 2>> $LOGFILE");
+			system("cat $MOUNTPOINT/usr2.bak | openssl aes-128-cbc -d -salt -k \"$CRYPTKEY\" -iter 1 | tar -C $ROOTDIR -xvf - usr2/bbx/bbxps 2>> $LOGFILE");
 			$returnval += $?;
 		}
 	}
@@ -5110,7 +5110,7 @@ sub restore_singlefiles
 	    # was removed in version 1.192 of rtibackup.pl.
 	    #
 	    # First, define the segments of the pipeline
-	    my $decrypt_cmd = "openssl aes-128-cbc -d -salt -k \"$CRYPTKEY\"";
+	    my $decrypt_cmd = "openssl aes-128-cbc -d -salt -k \"$CRYPTKEY\" -iter 1";
 	    my $decompress_cmd = "bzip2 -dc";
 	    my $tar_cmd = "tar -C $ROOTDIR -xvf - @files_to_restore";
 
@@ -5248,7 +5248,7 @@ sub validate_crypt_key
     loginfo("===== BEGIN Validate Cryptkey =====");
 
     my $cat_cmd = "cat $tarfile";
-    my $decrypt_cmd = "openssl aes-128-cbc -d -salt -k \"$cryptkey\" > /dev/null 2> /dev/null";
+    my $decrypt_cmd = "openssl aes-128-cbc -d -salt -k \"$cryptkey\" -iter 1 > /dev/null 2> /dev/null";
     my $validate_cmd = $cat_cmd . " | " . $decrypt_cmd;
 
     unless ($DRY_RUN) {
