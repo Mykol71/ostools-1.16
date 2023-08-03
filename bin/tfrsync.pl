@@ -610,7 +610,7 @@ my $DEF_RETRY_BACKUP_WAIT = 120;    # default seconds to wait between retries
 my $MAX_RETRY_BACKUP_WAIT = 3600;   # max value = 1 hour
 
 # network device
-my $DEF_NETWORK_DEVICE = 'eth0';
+my $DEF_NETWORK_DEVICE = 'tfeth0';
 
 # error exit status values of rsync(1)
 my $RSYNC_EXIT_STATUS_PARTIAL = 23;
@@ -10326,13 +10326,13 @@ sub tfr_restore_osconfigs
 
 
 #
-# Don't preserve the "HWADDR=" line in ifcfg-eth0. This causes issues
+# Don't preserve the "HWADDR=" line in ifcfg-tfeth0. This causes issues
 # when migrating ethernet configs from an older server to a new server.
 #
 sub tfr_edit_ifcfg
 {
-    my $oldfile = "/etc/sysconfig/network-scripts/ifcfg-eth0";
-    my $newfile = "/etc/sysconfig/network-scripts/ifcfg-eth0.$$";
+    my $oldfile = "/etc/sysconfig/network-scripts/ifcfg-tfeth0";
+    my $newfile = "/etc/sysconfig/network-scripts/ifcfg-tfeth0.$$";
 
     if (open(my $old, '<', $oldfile)) {
 	if (open(my $new, '>', $newfile)) {
@@ -15238,10 +15238,10 @@ may be from a RHEL5 system and the staged server may be a RHEL6 system.
 =item B<--network-device=s>
 
 This option allows the specification of a network interface device name,
-eg "eth0" or "eth1", and
+eg "tfeth0" or "tfeth1", and
 is only used to produce the contents of the
 production server info file when performing a backup.
-The default value is "eth0" so if you are using that interface
+The default value is "tfeth0" so if you are using that interface
 for your network tap, there is no need to specify this option.
 
 =item B<--send-summary>
