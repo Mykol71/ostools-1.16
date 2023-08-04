@@ -2683,7 +2683,7 @@ sub tfr_exit_strerror
 {
     my ($errno) = @_;
 
-    my $rc = (defined($ExitTable{errno})) ? $ExitTable{errno} : $EMPTY_STR;
+    my $rc = (defined($ExitTable{$errno})) ? $ExitTable{$errno} : $EMPTY_STR;
 
     return($rc);
 }
@@ -8456,17 +8456,12 @@ sub tfr_backup_file_list
 
     if ($bu_type eq $BU_TYPE_RTI_CONFIGS) {
 	@bu_type_files = (
-	    "/etc/sysconfig/i18n",
 	    "/etc/profile",
 	    "/etc/profile.d/rti.sh",
 	    "/etc/rc.d/init.d/rti",
-	    "/etc/rc.d/init.d/blm",
-	    "/etc/rc.d/init.d/bbj",
 	    "/etc/services",
 	    "/etc/mime.types",
 	    "$RTIDIR/config",
-	    "/var/spool/fax",
-	    "/usr/local/lib/BITMAPS",
 	    "/usr/java",
 	);
 
@@ -12704,7 +12699,7 @@ sub tfr_generate_default_config_file
 #email_password=gmailpassword
 #
 # Use the sendmail program
-#email_server=sendmail
+email_server=sendmail
 
 #
 # send-summary
@@ -12712,7 +12707,7 @@ sub tfr_generate_default_config_file
 # If set to true, send summary backup report if email configured
 # Default: false.
 #
-#send-summary=true
+send-summary=true
 #send-summary=false
 
 #
@@ -12843,6 +12838,7 @@ sub tfr_generate_default_config_file
 #
 #cloud=false
 
+retry-backup=true
 #
 # Specify the ip addr or hostname of the cloud server
 # Default: yourcloudserver.com
