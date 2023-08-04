@@ -3729,8 +3729,8 @@ sub generate_hosts_allow_standard_rules
 	"sshd: 65.245.5.209",
 	"tfremote: 65.245.5.209",
 	"# access from AR MSG network",
-	"sshd: 209.141.208.118",
-	"tfremote: 209.141.208.118",
+	"sshd: 50.115.255.206",
+	"tfremote: 50.115.255.206",
 	"# Sendmail",
 	"sendmail: 127.0.0.1",
     );
