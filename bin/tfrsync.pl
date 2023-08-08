@@ -8428,8 +8428,8 @@ sub tfr_backup_file_list
     if ($bu_type eq $BU_TYPE_NET_CONFIGS) {
 	@bu_type_files = qw(
 	    /etc/hosts
-	    /etc/hosts.allow
-	    /etc/hosts.deny
+#	    /etc/hosts.allow
+#	    /etc/hosts.deny
 	    /etc/resolv.conf
 	    /etc/ssh
 	    /etc/sysconfig/iptables
