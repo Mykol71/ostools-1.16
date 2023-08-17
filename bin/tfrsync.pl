@@ -8348,13 +8348,13 @@ sub tfr_backup_file_list
 	my @possible_files = qw(
 	    /etc/group
 	    /etc/group-
-	    /etc/gshadow
-	    /etc/gshadow-
+#	    /etc/gshadow
+#	    /etc/gshadow-
 	    /etc/login.defs
 	    /etc/passwd
 	    /etc/passwd-
-	    /etc/shadow
-	    /etc/shadow-
+#	    /etc/shadow
+#	    /etc/shadow-
 	    /etc/sudoers
 	    /etc/pam.d
 	    /home
@@ -9837,6 +9837,11 @@ sub tfr_restore_usr2
 	    elsif ($OS eq 'RHEL7') {
 		system("ln -sf /usr2/bbx/bin/tcc2_rhel7 /usr2/bbx/bin/tcc");
 		system("ln -sf /usr2/bbx/bin/tcc_rhel7 /usr2/bbx/bin/tcc_tws");
+	    }
+
+	    elsif ($OS eq 'RHEL8') {
+		system("ln -sf /usr2/bbx/bin/tcc2_rhel8 /usr2/bbx/bin/tcc");
+		system("ln -sf /usr2/bbx/bin/tcc_rhel8 /usr2/bbx/bin/tcc_tws");
 	    }
 
 	    else {
