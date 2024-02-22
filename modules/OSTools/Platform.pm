@@ -132,7 +132,7 @@ sub plat_os_version
 	# Redhat Enterprise Linux Server 8
 	if ((/(release)(\s+)(8)/)
 	    ||  (/(CentOS)([[:print:]]+)(\s)(8)/)) {
-	    $os = "RHEL7";
+	    $os = "RHEL8";
 	    last;
 	}
 	# Redhat Enterprise Linux Server 9
