@@ -4408,7 +4408,7 @@ sub get_netmask
 {
     my $netmask = $EMPTY_STR;
     my $pattern = 'Mask:';
-    if ($OS eq 'RHEL7') {
+    if (($OS eq 'RHEL7') || ($OS eq 'RHEL8')) {
 	$pattern = 'netmask ';
     }
 
@@ -8348,13 +8348,9 @@ sub tfr_backup_file_list
 	my @possible_files = qw(
 	    /etc/group
 	    /etc/group-
-#	    /etc/gshadow
-#	    /etc/gshadow-
 	    /etc/login.defs
 	    /etc/passwd
 	    /etc/passwd-
-#	    /etc/shadow
-#	    /etc/shadow-
 	    /etc/sudoers
 	    /etc/pam.d
 	    /home
@@ -10271,7 +10267,7 @@ sub tfr_restore_osconfigs
 	if (tfr_read_pserver_info_file($restored_pserver_info_file_path, \%pserver_info)) {
 	    loginfo("[restore_osconfigs] restored pserver info file read: $restored_pserver_info_file_path");
 	    if ( ($pserver_info{$SERVER_INFO_PLATFORM} eq 'RHEL5') &&
-		 ( ($OS eq 'RHEL6') || ($OS eq 'RHEL7') ) ) {
+		 ( ($OS eq 'RHEL6') || ($OS eq 'RHEL7') || ($OS eq 'RHEL8') ) ) {
 		@torestore = grep { $_ ne '/etc/rsyslog.conf' } @torestore;
 	    }
 	}
