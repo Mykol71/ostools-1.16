@@ -333,7 +333,7 @@ if ($SERVICES) {
     if ( ($OS eq 'RHEL5') || ($OS eq 'RHEL6') ) {
 	$exit_status = setup_system_services() ? $EXIT_OK : $EXIT_SERVICES;
     }
-    if ($OS eq 'RHEL7') {
+    if ( ($OS eq 'RHEL7') || ($OS eq 'RHEL8') ) {
 	$exit_status = configure_system_services() ? $EXIT_OK : $EXIT_SERVICES;
     }
     push(@exit_list, $exit_status);
@@ -1455,8 +1455,8 @@ sub get_gateway_ipaddr
     my @route_table_entry = ();
     my $gateway = "";
 
-    my $route_cmd = ( ($OS eq 'RHEL6') || ($OS eq 'RHEL7') ) ? 'ip route list' : '/sbin/route -n';
-    my $pattern = ( ($OS eq 'RHEL6') || ($OS eq 'RHEL7') ) ? 'default' : '0.0.0.0';
+    my $route_cmd = ( ($OS eq 'RHEL6') || ($OS eq 'RHEL7') || ($OS eq 'RHEL8') ) ? 'ip route list' : '/sbin/route -n';
+    my $pattern = ( ($OS eq 'RHEL6') || ($OS eq 'RHEL7') || ($OS eq 'RHEL8') ) ? 'default' : '0.0.0.0';
     
     if (open(my $pipe, '-|', $route_cmd)) {
 	while (<$pipe>) {
@@ -1478,7 +1478,7 @@ sub get_gateway_ipaddr
 
     # for RHEL6 and RHEL7 systems, the ip address of gateway is at
     # index 2 rather than 1
-    my $i = ( ($OS eq 'RHEL6') || ($OS eq 'RHEL7') ) ? 2 : 1;
+    my $i = ( ($OS eq 'RHEL6') || ($OS eq 'RHEL7') || ($OS eq 'RHEL8') ) ? 2 : 1;
     $gateway = $route_table_entry[$i];
     if ($gateway =~ /(\d+)(\.)(\d+)(\.)(\d+)(\.)(\d+)/) {
 	return($gateway);
@@ -1993,7 +1993,7 @@ sub pam_system_auth_add_symlinks
     # Have to also do this symlink for RHEL6 and RHEL7 since "/etc/pam.d/sshd"
     # includes "/etc/pam.d/password-auth" - this changed from RHEL5 to
     # RHEL6.
-    if ( ($OS eq 'RHEL6') || ($OS eq 'RHEL7') ) {
+    if ( ($OS eq 'RHEL6') || ($OS eq 'RHEL7') || ($OS eq 'RHEL8') ) {
 	system("$ln_cmd -sf $conf_file_basename password-auth");
     }
 
@@ -2181,7 +2181,7 @@ sub pam_modify_rules
 {
     pam_modify_security_limits();
 
-    if ( ($OS eq 'RHEL5') || ($OS eq 'RHEL6') || ($OS eq 'RHEL7') ) {
+    if ( ($OS eq 'RHEL5') || ($OS eq 'RHEL6') || ($OS eq 'RHEL7') || ($OS eq 'RHEL8') ) {
 	pam_system_auth_modify();
     }
 
@@ -2899,8 +2899,8 @@ ADMINS ALL=NOPASSWD: /usr2/bbx/bin/tfprinter.pl
 xxxEOFxxx
 
 	# change in RHEL7: now requires sudo for smbstatus
-	if ($OS eq 'RHEL7') {
-	    print(NEW "# RHEL7 Specific\n");
+	if ( ($OS eq 'RHEL7') || ($OS eq 'RHEL8') ) {
+	    print(NEW "# RHEL7,8 Specific\n");
 	    print(NEW "ADMINS ALL=NOPASSWD: /usr/bin/smbstatus\n");
 	    print(NEW "\n");
 	}
@@ -3207,7 +3207,7 @@ sub hl_harden_iptables
 	# Loopback device
 	system("$fwcmd -A INPUT -i lo -j ACCEPT");
 	system("$fwcmd -A OUTPUT -o lo -j ACCEPT");
-	if ($OS eq "RHEL6" || $OS eq "RHEL7") {
+	if ($OS eq "RHEL6" || $OS eq "RHEL7" || $OS eq "RHEL8") {
 	    system("$fwcmd -A INPUT -s 127.0.0.0/255.0.0.0 ! -i lo -j DROP");
 	}
 	else {
@@ -3392,7 +3392,7 @@ sub hl_harden_iptables
 		    if ( ($OS eq 'RHEL5') || ($OS eq 'RHEL6') ) {
 			$exit_status = system("/sbin/service iptables restart");
 		    }
-		    elsif ($OS eq 'RHEL7') {
+		    elsif ( ($OS eq 'RHEL7') || ($OS eq 'RHEL8') ) {
 			$exit_status = system("/bin/systemctl restart iptables.service");
 		    }
 		    else {
@@ -3416,7 +3416,7 @@ sub hl_harden_iptables
 	}
 
 
-	my $conf_file = ( ($OS eq 'RHEL6') || ($OS eq 'RHEL7') ) ? '/etc/rsyslog.conf' : '/etc/syslog.conf';
+	my $conf_file = ( ($OS eq 'RHEL6') || ($OS eq 'RHEL7') || ($OS eq 'RHEL8') ) ? '/etc/rsyslog.conf' : '/etc/syslog.conf';
 	if (hl_iptables_modify_syslog($conf_file)) {
 	    loginfo("[iptables] new conf file generated: $conf_file");
 	}
@@ -3631,7 +3631,7 @@ sub disable_ipv6
 
     }
 
-    if ($OS eq 'RHEL7') {
+    if ( ($OS eq 'RHEL7') || ($OS eq 'RHEL8') ) {
 
 	disable_ipv6_add_sysctl_config();
 
@@ -3987,7 +3987,7 @@ sub modify_sshd
 	    if ( ($OS eq 'RHEL5') || ($OS eq 'RHEL6') ) {
 		system ("/sbin/service sshd restart");
 	    }
-	    if ($OS eq 'RHEL7') {
+	    if ( ($OS eq 'RHEL7') || ($OS eq 'RHEL8') ) {
 		system ("/usr/bin/systemctl restart sshd");
 	    }
 	    showinfo("[mod ssh] sshd system service restarted");

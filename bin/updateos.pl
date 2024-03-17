@@ -1061,7 +1061,7 @@ if ($TEST_EDIT_SYSLOG_CONF) {
 	    if ($OS eq 'RHEL5' || $OS eq 'RHEL6') {
 		exit(uos_configure_i18n());
 	    }
-	    elsif ($OS eq 'RHEL7') {
+	    elsif ($OS eq 'RHEL7' || $OS eq 'RHEL8') {
 		showinfo("[main] --i18n is only supported on RHEL5 and RHEL6");
 		exit($EXIT_WRONG_PLATFORM);
 	    }
@@ -1077,7 +1077,7 @@ if ($TEST_EDIT_SYSLOG_CONF) {
 		showinfo("[main] --locale is only supported on RHEL7");
 		exit($EXIT_WRONG_PLATFORM);
 	    }
-	    elsif ($OS eq 'RHEL7') {
+	    elsif ($OS eq 'RHEL7' || $OS eq 'RHEL8' ) {
 		exit(uos_set_system_locale());
 	    }
 	    else {
@@ -1781,7 +1781,7 @@ sub uos_pathto_syslog_conf
     elsif ($os eq 'RHEL5') {
 	$conf_file_path = '/etc/sysconfig/syslog';
     }
-    elsif ( ($OS eq 'RHEL6') || ($OS eq 'RHEL7') ) {
+    elsif ( ($OS eq 'RHEL6') || ($OS eq 'RHEL7') || ($OS eq 'RHEL8') ) {
 	$conf_file_path = '/etc/rsyslog.conf';
     }
 
@@ -2193,7 +2193,7 @@ sub uos_edit_network_ifcfg
 		print {$new} "NETMASK=\"$netmask\"\n";
 		print {$new} "GATEWAY=\"$gateway\"\n";
 
-		if ( ($OS eq 'RHEL6') || ($OS eq 'RHEL7') ) {
+		if ( ($OS eq 'RHEL6') || ($OS eq 'RHEL7') || ($OS eq 'RHEL8') ) {
 		    print {$new} "NM_CONTROLLED=\"no\"\n";
 		}
 
@@ -2449,7 +2449,7 @@ sub uos_configure_hostname
 	    return(0);
 	}
     }
-    if ($OS eq 'RHEL7') {
+    if ($OS eq 'RHEL7' || $OS eq 'RHEL8') {
 	my $cmd = 'hostnamectl set-hostname';
 	system("$cmd $new_hostname");
 	if ($? == 0) {
@@ -2878,7 +2878,7 @@ sub update_ospatches_is_kernel_patch
 
 sub update_ospatches
 {
-	unless ( ($OS eq 'RHEL7') || ($OS eq 'RHEL6') || ($OS eq 'RHEL5') ) {
+	unless ( ($OS eq 'RHEL8') || ($OS eq 'RHEL7') || ($OS eq 'RHEL6') || ($OS eq 'RHEL5') ) {
 	    return($EXIT_WRONG_PLATFORM);
 	}
 
@@ -3714,7 +3714,7 @@ sub uos_configure_samba_passdb
 	if ( ($OS eq 'RHEL5') || ($OS eq 'RHEL6') ) {
 	    system("/sbin/service smb restart");
 	}
-	if ($OS eq 'RHEL7') {
+	if ( ($OS eq 'RHEL7') || ($OS eq 'RHEL8') ) {
 	    system("/bin/systemctl restart smb");
 	}
 	showinfo("[config samba passdb] samba system service restarted");
@@ -3819,7 +3819,7 @@ sub uos_rebuild_samba_passdb
 {
     my $conf_file = uos_pathto_samba_password();
 
-    if ( ($OS eq 'RHEL6') || ($OS eq 'RHEL7') ) {
+    if ( ($OS eq 'RHEL6') || ($OS eq 'RHEL7') || ($OS eq 'RHEL8') ) {
 	unless (-e $conf_file) {
 	    $conf_file = "/var/lib/samba/private/smbpasswd";
 	}
@@ -3885,7 +3885,7 @@ sub uos_config_samba_service
 	    system("/sbin/service $service_name start");
 	}
     }
-    elsif ($OS eq 'RHEL7') {
+    elsif ( ($OS eq 'RHEL7') || ($OS eq 'RHEL8') ) {
 	my $sys_ctl_cmd = '/bin/systemctl';
 	system("$sys_ctl_cmd -q is-enabled $service_name");
 	if ($? != 0) {
@@ -3933,7 +3933,7 @@ sub uos_restart_samba_service
     if ( ($OS eq 'RHEL5') || ($OS eq 'RHEL6') ) {
 	$exit_status = system("/sbin/service $service_name restart");
     }
-    elsif ($OS eq 'RHEL7') {
+    elsif ( ($OS eq 'RHEL7') || ($OS eq 'RHEL8') ) {
 	$exit_status = system("/bin/systemctl restart $service_name");
     }
     else {
@@ -4269,7 +4269,7 @@ sub uos_baremetal_install
 	# required for Red Hat
 	else {
 
-	    if ( ($OS eq 'RHEL5') || ($OS eq 'RHEL6') || ($OS eq 'RHEL7') ) {
+	    if ( ($OS eq 'RHEL5') || ($OS eq 'RHEL6') || ($OS eq 'RHEL7') || ($OS eq 'RHEL8') ) {
 
 		# first check to see if already registered
 		my $sub_mgr_status = sub_mgr_get_status();
@@ -4316,7 +4316,7 @@ sub uos_baremetal_install
 	    uos_configure_default_runlevel();
 	}
 	# systemd: set default target to multi-user
-	if ($OS eq 'RHEL7') {
+	if ( ($OS eq 'RHEL7') || ($OS eq 'RHEL8') ) {
 	    uos_configure_default_target();
 	}
 
@@ -4359,7 +4359,7 @@ sub uos_baremetal_install
 	#   2) configure grub2: init the console rez
 	#   3) configure grub2: disable kernel (video) mode setting
 	#
-	if ($OS eq 'RHEL7') {
+	if ( ($OS eq 'RHEL7') || ($OS eq 'RHEL8') ) {
 	    uos_configure_grub2();
 	}
 
