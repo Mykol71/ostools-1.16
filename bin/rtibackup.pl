@@ -2380,7 +2380,7 @@ sub backup_osconfigs
 	);
 
 	# contains setting for kernel log message priority for console
-	if ( ($OS eq 'RHEL6') || ($OS eq 'RHEL7') ) {
+	if ( ($OS eq 'RHEL6') || ($OS eq 'RHEL7') || ($OS eq 'RHEL8') ) {
 	    push(@common_files, '/etc/rsyslog.conf');
 	}
 	else {
@@ -2803,7 +2803,7 @@ sub is_on_usb_bus
     # first choose the command to get udev info depending on platform
     my $udev_cmd = '/usr/bin/udevinfo';
     my $udev_opt = "";
-    if ( ($OS eq 'RHEL6') || ($OS eq 'RHEL7') ) {
+    if ( ($OS eq 'RHEL6') || ($OS eq 'RHEL7') || ($OS eq 'RHEL8') ) {
 	$udev_cmd = '/sbin/udevadm';
 	$udev_opt = 'info';
     }
@@ -4298,6 +4298,11 @@ sub restore_usr2
 	    system("ln -sf /usr2/bbx/bin/tcc_rhel7 /usr2/bbx/bin/tcc_tws");
 	}
 
+	elsif ($OS eq 'RHEL8') {
+	    system("ln -sf /usr2/bbx/bin/tcc2_rhel8 /usr2/bbx/bin/tcc");
+	    system("ln -sf /usr2/bbx/bin/tcc_rhel8 /usr2/bbx/bin/tcc_tws");
+	}
+
 	else {
 	    logerror("could not make TCC links: unsupported platform: $OS");
 	}
@@ -4814,7 +4819,7 @@ sub samba_set_passdb
 sub samba_rebuild_passdb
 {
     my $conf_file = '/etc/samba/smbpasswd';
-    if ( ($OS eq 'RHEL6') || ($OS eq 'RHEL7') ) {
+    if ( ($OS eq 'RHEL6') || ($OS eq 'RHEL7') || ($OS eq 'RHEL8') ) {
 	if (! -e $conf_file) {
 	    my $alt_conf_file = '/var/lib/samba/private/smbpasswd';
 	    if (-e $alt_conf_file) {
@@ -4938,12 +4943,12 @@ sub restore_osconfigs
 	# Restore OS Configurations
 	$returnval = restore_tarfile("$MOUNTPOINT/configs/osconfigs.bak", \@restore_excludes);
 	if($returnval == 0) {
-		my $service_name = ( ($OS eq 'RHEL6') || ($OS eq 'RHEL7') ) ? 'rsyslog' : 'syslog';
+		my $service_name = ( ($OS eq 'RHEL6') || ($OS eq 'RHEL7') || ($OS eq 'RHEL8') ) ? 'rsyslog' : 'syslog';
 		system("/sbin/service $service_name restart 2>> $LOGFILE");
 		system("/sbin/service rhnsd restart 2>> $LOGFILE");
 		system("/sbin/service sendmail restart 2>> $LOGFILE");
 
-		if ($UPGRADE && ( ($OS eq 'RHEL6') || ($OS eq 'RHEL7') )) {
+		if ($UPGRADE && ( ($OS eq 'RHEL6') || ($OS eq 'RHEL7') || ($OS eq 'RHEL8') )) {
 		    samba_set_passdb();
 		    samba_rebuild_passdb();
 		}

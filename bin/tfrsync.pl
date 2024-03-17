@@ -4408,7 +4408,7 @@ sub get_netmask
 {
     my $netmask = $EMPTY_STR;
     my $pattern = 'Mask:';
-    if (($OS eq 'RHEL7') || ($OS eq 'RHEL8')) {
+    if ( ($OS eq 'RHEL7') || ($OS eq 'RHEL8') ) {
 	$pattern = 'netmask ';
     }
 
@@ -4578,7 +4578,7 @@ sub system_service_restart
     if ( ($OS eq 'RHEL5') || ($OS eq 'RHEL6') ) {
 	$exit_status = system("/sbin/service $service_name restart 2>> $LOGFILE");
     }
-    if ($OS eq 'RHEL7') {
+    if ( ($OS eq 'RHEL7') || ($OS eq 'RHEL8') ) {
 	$exit_status = system("/bin/systemctl restart $service_name 2>> $LOGFILE");
     }
 
@@ -8394,7 +8394,7 @@ sub tfr_backup_file_list
 	);
 
 	# contains setting for kernel log message priority for console
-	if ( ($OS eq 'RHEL6') || ($OS eq 'RHEL7') ) {
+	if ( ($OS eq 'RHEL6') || ($OS eq 'RHEL7') || ($OS eq 'RHEL8') ) {
 	    push(@common_files, '/etc/rsyslog.conf');
 	}
 	if ($OS eq 'RHEL5') {
@@ -10585,7 +10585,7 @@ sub is_on_usb_bus
     # first choose the command to get udev info depending on platform
     my $udev_cmd = '/usr/bin/udevinfo';
     my $udev_opt = $EMPTY_STR;
-    if ( ($OS eq 'RHEL6') || ($OS eq 'RHEL7') ) {
+    if ( ($OS eq 'RHEL6') || ($OS eq 'RHEL7') || ($OS eq 'RHEL8') ) {
 	$udev_cmd = '/sbin/udevadm';
 	$udev_opt = 'info';
     }

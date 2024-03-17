@@ -285,7 +285,7 @@ sub start_tfremote
     if ( ($OS eq 'RHEL5') || ($OS eq 'RHEL6') ) {
 	return(system("/sbin/service tfremote start"));
     }
-    if ($OS eq 'RHEL7') {
+    if ( ($OS eq 'RHEL7') || ($OS eq 'RHEL8') ) {
 	return(system("systemctl start tfremote.service"));
     }
 }
@@ -296,7 +296,7 @@ sub stop_tfremote
     if ( ($OS eq 'RHEL5') || ($OS eq 'RHEL6') ) {
 	return(system("/sbin/service tfremote stop"));
     }
-    if ($OS eq 'RHEL7') {
+    if ( ($OS eq 'RHEL7') || ($OS eq 'RHEL8') ) {
 	return(system("systemctl stop tfremote.service"));
     }
 }
@@ -307,7 +307,7 @@ sub tfremote_status
     if ( ($OS eq 'RHEL5') || ($OS eq 'RHEL6') ) {
 	return(system("/sbin/service tfremote status"));
     }
-    if ($OS eq 'RHEL7') {
+    if ( ($OS eq 'RHEL7') || ($OS eq 'RHEL8') ) {
 	return(system("systemctl status tfremote.service"));
     }
 }
@@ -347,7 +347,7 @@ sub tfrem_install_verify_files
     if ( ($OS eq 'RHEL5') || ($OS eq 'RHEL6') ) {
 	push(@required_files, $DEF_SSHD_INIT);
     }
-    if ($OS eq 'RHEL7') {
+    if ( ($OS eq 'RHEL7') || ($OS eq 'RHEL8') ) {
 	push(@required_files, $DEF_SSHD_SERVICE);
     }
     foreach my $file (@required_files) {
@@ -392,7 +392,7 @@ sub tfrem_install_make_startup_file
 		    $line =~ s/prog=\"([[:print:]]+)\"/prog=\"tfremote\"/g;
 		    $line =~ s/description: .+$/description: Teleflora POS Remote Access/;
 		}
-		if ($OS eq 'RHEL7') {
+		if ( ($OS eq 'RHEL7') || ($OS eq 'RHEL8') ) {
 		    $line =~ s/Description=.*$/Description=OpenSSH-tfremote server daemon/;
 		    $line =~ s/After=.*$/After=network.target sshd.service/;
 		    if ($line =~ /Wants=/) {
@@ -488,7 +488,7 @@ sub tfrem_install_make_config_file
 		print {$newfh} "HostKey /etc/ssh/tfremote_host_rsa_key\n";
 		print {$newfh} "HostKey /etc/ssh/tfremote_host_dsa_key\n";
 	    }
-	    if ($OS eq 'RHEL7') {
+	    if ( ($OS eq 'RHEL7') || ($OS eq 'RHEL8') ) {
 		print {$newfh} "HostKey /etc/ssh/ssh_host_rsa_key\n";
 		print {$newfh} "HostKey /etc/ssh/ssh_host_ecdsa_key\n";
 		print {$newfh} "HostKey /etc/ssh/ssh_host_ed25519_key\n";
@@ -570,7 +570,7 @@ sub tfrem_install
 	    return(1);
 	}
     }
-    if ($OS eq 'RHEL7') {
+    if ( ($OS eq 'RHEL7') || ($OS eq 'RHEL8') ) {
 	if (-e $DEF_TFREMOTE_SERVICE) {
 	    print "$ml $PROGNAME already installed, service file exists: $DEF_TFREMOTE_SERVICE\n";
 	    return(1);
@@ -593,7 +593,7 @@ sub tfrem_install
 	$ssh_start_file = $DEF_SSHD_INIT;
 	$tfremote_start_file = $DEF_TFREMOTE_INIT;
     }
-    if ($OS eq 'RHEL7') {
+    if ( ($OS eq 'RHEL7') || ($OS eq 'RHEL8') ) {
 	$ssh_start_file = $DEF_SSHD_SERVICE;
 	$tfremote_start_file = $DEF_TFREMOTE_SERVICE;
     }
@@ -664,7 +664,7 @@ sub tfrem_install
 	# start the service
 	system("/sbin/service tfremote start");
     }
-    if ($OS eq 'RHEL7') {
+    if ( ($OS eq 'RHEL7') || ($OS eq 'RHEL8') ) {
 	# enable the service
 	system("systemctl enable tfremote.service");
 
