@@ -760,7 +760,7 @@ if ($#BACKUP >= 0) {
 
 	    else {
 		my $cat_cmd = "cat /etc/redhat-release";
-		my $encrypt_cmd = "nice openssl aes-128-cbc -e -salt -k \"$CRYPTKEY\"";
+		my $encrypt_cmd = "nice openssl aes-256-cbc -e -salt -k \"$CRYPTKEY\"";
 		my $cmd = $cat_cmd . " | " . $encrypt_cmd . " > $MOUNTPOINT/$VALIDATION_FILE";
 
 		system("$cmd");
@@ -1615,7 +1615,7 @@ sub is_compressed
 
     my $tmpfile = make_tempfile($prefix);
 
-    my $decrypt_cmd = "openssl aes-128-cbc -d -salt -k \"$CRYPTKEY\"";
+    my $decrypt_cmd = "openssl aes-256-cbc -d -salt -k \"$CRYPTKEY\" -md md5";
 
     my $undo_cmd = "cat $bu_file | " . $decrypt_cmd;
 
@@ -2380,7 +2380,7 @@ sub backup_osconfigs
 	);
 
 	# contains setting for kernel log message priority for console
-	if ( ($OS eq 'RHEL6') || ($OS eq 'RHEL7') || ($OS eq 'RHEL8') ) {
+	if ( ($OS eq 'RHEL6') || ($OS eq 'RHEL7') ) {
 	    push(@common_files, '/etc/rsyslog.conf');
 	}
 	else {
@@ -2803,7 +2803,7 @@ sub is_on_usb_bus
     # first choose the command to get udev info depending on platform
     my $udev_cmd = '/usr/bin/udevinfo';
     my $udev_opt = "";
-    if ( ($OS eq 'RHEL6') || ($OS eq 'RHEL7') || ($OS eq 'RHEL8') ) {
+    if ( ($OS eq 'RHEL6') || ($OS eq 'RHEL7') ) {
 	$udev_cmd = '/sbin/udevadm';
 	$udev_opt = 'info';
     }
@@ -3357,7 +3357,7 @@ sub create_tarfile
 	#
 	my $tar_cmd = "nice tar --exclude-from=/tmp/exclude.$$ -cvf - @tobackup";
 	my $compress_cmd = "nice bzip2 --quiet";
-	my $encrypt_cmd = "nice openssl aes-128-cbc -e -salt -k \"$CRYPTKEY\"";
+	my $encrypt_cmd = "nice openssl aes-256-cbc -e -salt -k \"$CRYPTKEY\"";
 
 	if ($COMPRESS_BU) {
 		$tar_cmd .= " | " . $compress_cmd;
@@ -3535,7 +3535,7 @@ sub restore_tarfile
 	# was removed in version 1.192 of rtibackup.pl.
 	#
 	my $untar_cmd = "cat $tarfile";
-	my $decrypt_cmd = "openssl aes-128-cbc -d -salt -k \"$CRYPTKEY\"";
+	my $decrypt_cmd = "openssl aes-256-cbc -d -salt -k \"$CRYPTKEY\" -md md5";
 	my $decompress_cmd = "bzip2 -dc";
 	my $tar_cmd = "tar -C $ROOTDIR --exclude-from /tmp/restore-excludes.$$ $keepfiles -xvf -";
 
@@ -3693,7 +3693,7 @@ sub list_tarfile
 	# was removed in version 1.192 of rtibackup.pl.
 	#
 	my $untar_cmd = "cat $tarfile";
-	my $decrypt_cmd = "nice openssl aes-128-cbc -d -salt -k \"$CRYPTKEY\"";
+	my $decrypt_cmd = "nice openssl aes-256-cbc -d -salt -k \"$CRYPTKEY\"-md md5";
 	my $decompress_cmd = "nice bzip2 -dc";
 	my $tar_cmd = "nice tar -tvf -";
 
@@ -4118,7 +4118,7 @@ sub restore_files
 		if($RTI == 0) {
 			loginfo("--rti not specified. Will not restore bbxd files.");
 		} else {
-			system("cat $MOUNTPOINT/usr2.bak | openssl aes-128-cbc -d -salt -k \"$CRYPTKEY\" | tar -C $ROOTDIR -xvf - usr2/bbx/bbxd 2>> $LOGFILE");
+			system("cat $MOUNTPOINT/usr2.bak | openssl aes-256-cbc -d -salt -k \"$CRYPTKEY\" | tar -C $ROOTDIR -xvf - usr2/bbx/bbxd 2>> $LOGFILE");
 			$returnval += $?;
 		}
 	}
@@ -4129,7 +4129,7 @@ sub restore_files
 		if($RTI == 0) {
 			loginfo("--rti not specified. Will not restore bbxps files.");
 		} else {
-			system("cat $MOUNTPOINT/usr2.bak | openssl aes-128-cbc -d -salt -k \"$CRYPTKEY\" | tar -C $ROOTDIR -xvf - usr2/bbx/bbxps 2>> $LOGFILE");
+			system("cat $MOUNTPOINT/usr2.bak | openssl aes-256-cbc -d -salt -k \"$CRYPTKEY\" | tar -C $ROOTDIR -xvf - usr2/bbx/bbxps 2>> $LOGFILE");
 			$returnval += $?;
 		}
 	}
@@ -4296,11 +4296,6 @@ sub restore_usr2
 	elsif ($OS eq 'RHEL7') {
 	    system("ln -sf /usr2/bbx/bin/tcc2_rhel7 /usr2/bbx/bin/tcc");
 	    system("ln -sf /usr2/bbx/bin/tcc_rhel7 /usr2/bbx/bin/tcc_tws");
-	}
-
-	elsif ($OS eq 'RHEL8') {
-	    system("ln -sf /usr2/bbx/bin/tcc2_rhel8 /usr2/bbx/bin/tcc");
-	    system("ln -sf /usr2/bbx/bin/tcc_rhel8 /usr2/bbx/bin/tcc_tws");
 	}
 
 	else {
@@ -4819,7 +4814,7 @@ sub samba_set_passdb
 sub samba_rebuild_passdb
 {
     my $conf_file = '/etc/samba/smbpasswd';
-    if ( ($OS eq 'RHEL6') || ($OS eq 'RHEL7') || ($OS eq 'RHEL8') ) {
+    if ( ($OS eq 'RHEL6') || ($OS eq 'RHEL7') ) {
 	if (! -e $conf_file) {
 	    my $alt_conf_file = '/var/lib/samba/private/smbpasswd';
 	    if (-e $alt_conf_file) {
@@ -4943,12 +4938,12 @@ sub restore_osconfigs
 	# Restore OS Configurations
 	$returnval = restore_tarfile("$MOUNTPOINT/configs/osconfigs.bak", \@restore_excludes);
 	if($returnval == 0) {
-		my $service_name = ( ($OS eq 'RHEL6') || ($OS eq 'RHEL7') || ($OS eq 'RHEL8') ) ? 'rsyslog' : 'syslog';
+		my $service_name = ( ($OS eq 'RHEL6') || ($OS eq 'RHEL7') ) ? 'rsyslog' : 'syslog';
 		system("/sbin/service $service_name restart 2>> $LOGFILE");
 		system("/sbin/service rhnsd restart 2>> $LOGFILE");
 		system("/sbin/service sendmail restart 2>> $LOGFILE");
 
-		if ($UPGRADE && ( ($OS eq 'RHEL6') || ($OS eq 'RHEL7') || ($OS eq 'RHEL8') )) {
+		if ($UPGRADE && ( ($OS eq 'RHEL6') || ($OS eq 'RHEL7') )) {
 		    samba_set_passdb();
 		    samba_rebuild_passdb();
 		}
@@ -5115,7 +5110,7 @@ sub restore_singlefiles
 	    # was removed in version 1.192 of rtibackup.pl.
 	    #
 	    # First, define the segments of the pipeline
-	    my $decrypt_cmd = "openssl aes-128-cbc -d -salt -k \"$CRYPTKEY\"";
+	    my $decrypt_cmd = "openssl aes-256-cbc -d -salt -k \"$CRYPTKEY\" -md md5";
 	    my $decompress_cmd = "bzip2 -dc";
 	    my $tar_cmd = "tar -C $ROOTDIR -xvf - @files_to_restore";
 
@@ -5253,7 +5248,7 @@ sub validate_crypt_key
     loginfo("===== BEGIN Validate Cryptkey =====");
 
     my $cat_cmd = "cat $tarfile";
-    my $decrypt_cmd = "openssl aes-128-cbc -d -salt -k \"$cryptkey\" > /dev/null 2> /dev/null";
+    my $decrypt_cmd = "openssl aes-256-cbc -d -salt -k \"$cryptkey\" -md md5 > /dev/null 2> /dev/null";
     my $validate_cmd = $cat_cmd . " | " . $decrypt_cmd;
 
     unless ($DRY_RUN) {
