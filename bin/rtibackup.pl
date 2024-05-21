@@ -2803,7 +2803,7 @@ sub is_on_usb_bus
     # first choose the command to get udev info depending on platform
     my $udev_cmd = '/usr/bin/udevinfo';
     my $udev_opt = "";
-    if ( ($OS eq 'RHEL6') || ($OS eq 'RHEL7') ) {
+    if ( ($OS eq 'RHEL8') || ($OS eq 'RHEL7') ) {
 	$udev_cmd = '/sbin/udevadm';
 	$udev_opt = 'info';
     }
