@@ -3254,13 +3254,13 @@ sub hl_harden_iptables
 	my $recent_add_list = "-m recent --name sshprobe --set";
 
 	## Now use these matches for allowing ssh under acceptable conditions
-	system("$fwcmd -A INPUT -p tcp --dport 22 -m state --state NEW $recent_too_fast -j DROP");
 #mg fix below add network addr and gravity free publics
 	#system("$fwcmd -A INPUT -p tcp --dport 22 -m state --state NEW $recent_add_list -j LOG_ACCEPT");
 	system("$fwcmd -A INPUT -p tcp -s $network_addr --dport 22 -m state --state NEW -j LOG_ACCEPT");
 	system("$fwcmd -A INPUT -p tcp -s 64.156.24.14,64.156.24.15,64.156.29.69,64.156.29.99 --dport 22 -m state --state NEW -j LOG_ACCEPT");
 #TF below
 	system("$fwcmd -A INPUT -p tcp -s 65.198.163.36,65.245.5.36,65.245.5.209,50.115.255.206 --dport 22 -m state --state NEW -j LOG_ACCEPT");
+	system("$fwcmd -A INPUT -p tcp --dport 22 -m state --state NEW $recent_too_fast -j DROP");
 
 	## Do the same thing for tfremote which is really ssh
 	system("$fwcmd -A INPUT -p tcp --dport 15022 -m state --state NEW $recent_too_fast -j DROP");
