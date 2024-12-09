@@ -354,7 +354,8 @@ my $DEF_RSYNC_TIMEOUT = 600;
 
 my $DEF_RSYNC_COMPRESSION = 0;
 
-my $DEF_CLOUD_SERVER = 'rticloud.homelinux.com';
+#my $DEF_CLOUD_SERVER = 'rticloud.homelinux.com';
+my $DEF_CLOUD_SERVER = 'rticloud.centralus.cloudapp.azure.com';
 
 my $SSH_KEY_FILENAME = 'id_rsa';
 my $SSH_KEY_FILENAME_PUBLIC = 'id_rsa.pub';
